@@ -13,6 +13,8 @@ import com.google.api.client.util.store.FileDataStoreFactory;
 import com.google.api.services.docs.v1.Docs;
 import com.google.api.services.docs.v1.DocsScopes;
 import com.google.api.services.docs.v1.model.Document;
+import com.google.api.services.drive.Drive;
+import com.google.api.services.drive.Drive.Files;
 import com.google.api.services.drive.DriveScopes;
 
 import java.io.FileNotFoundException;
@@ -33,7 +35,9 @@ public class DocsQuickstart {
      * Global instance of the scopes required by this quickstart.
      * If modifying these scopes, delete your previously saved tokens/ folder.
      */
-    private static final List<String> SCOPES = Collections.singletonList("https://www.googleapis.com/auth/drive");
+    
+    //https://www.googleapis.com/auth/drive
+    private static final List<String> SCOPES = Collections.singletonList(DocsScopes.DRIVE);
     private static final String CREDENTIALS_FILE_PATH = "/credentials.json";
 
     /**
@@ -70,6 +74,7 @@ public class DocsQuickstart {
         // Prints the title of the requested doc:
         // https://docs.google.com/document/d/195j9eDD3ccgjQRttHhJPymLJUCOUjs-jmwTrekvdjFE/edit
 //        Document response = service.documents().get(DOCUMENT_ID).execute();
+//
 //        String title = response.getTitle();
 //
 //        System.out.printf("The title of the doc is: %s\n", title);

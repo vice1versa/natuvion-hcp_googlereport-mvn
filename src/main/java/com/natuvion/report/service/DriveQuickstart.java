@@ -35,7 +35,7 @@ public class DriveQuickstart {
      * If modifying these scopes, delete your previously saved tokens/ folder.
      */
     
-    private static final List<String> SCOPES 			= Collections.singletonList(DriveScopes.DRIVE_METADATA_READONLY);
+    private static final List<String> SCOPES 			= Collections.singletonList(DriveScopes.DRIVE);
     private static final String CREDENTIALS_FILE_PATH 	= "/credentials.json";
 
     /**
@@ -66,13 +66,7 @@ public class DriveQuickstart {
         return new AuthorizationCodeInstalledApp(flow, receiver).authorize("user");
     }
 
-    public static void main(String... args) throws IOException, GeneralSecurityException {
-        // Build a new authorized API client service.
-        final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
-        
-        Drive service = new Drive.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
-                .setApplicationName(APPLICATION_NAME)
-                .build();
+    public void listFiles(Drive service) throws IOException, GeneralSecurityException {
 
         // Print the names and IDs for up to 10 files.
         FileList result = service.files().list()
@@ -92,5 +86,17 @@ public class DriveQuickstart {
                 System.out.printf("%s (%s)\n", file.getName(), file.getId());
             }
         }
+    }
+    
+    public Drive startService() throws GeneralSecurityException, IOException {
+    	
+    	// Build a new authorized API client service.
+        final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
+        
+        Drive service = new Drive.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
+                .setApplicationName(APPLICATION_NAME)
+                .build();
+    	
+    	return service;
     }
 }

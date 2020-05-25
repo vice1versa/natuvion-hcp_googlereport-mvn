@@ -13,8 +13,10 @@ import com.google.api.services.docs.v1.model.InsertInlineImageRequest;
 import com.google.api.services.docs.v1.model.InsertTextRequest;
 import com.google.api.services.docs.v1.model.Location;
 import com.google.api.services.docs.v1.model.Range;
+import com.google.api.services.docs.v1.model.ReplaceAllTextRequest;
 import com.google.api.services.docs.v1.model.Request;
 import com.google.api.services.docs.v1.model.Size;
+import com.google.api.services.docs.v1.model.SubstringMatchCriteria;
 
 public class LayoutElements {
 	
@@ -24,7 +26,22 @@ public class LayoutElements {
 
 	List<Request> requests = new ArrayList<>();
 	
+	public void replaceVar(String DOCUMENT_ID, String var, String replacement, Docs service) throws IOException {
+		
+		//String varFormat = String.format("{{%s}}", var);
+		
+        requests.add(new Request()
+                .setReplaceAllText(new ReplaceAllTextRequest()
+                        .setContainsText(new SubstringMatchCriteria()
+                                .setText(String.format("{{%s}}", var))
+                                .setMatchCase(true))
+                        .setReplaceText(replacement)));
+		
+        update(service, DOCUMENT_ID);
+	}
+	
 	private void insertingText(
+			
 			String text, int idx,
 			String DOCUMENT_ID, Docs docsService
 			) throws IOException {
@@ -37,7 +54,7 @@ public class LayoutElements {
 	}
 	
 	
-	private void deleteContext(Docs docsService, String DOCUMENT_ID) throws IOException {
+	private void deleteContent(Docs docsService, String DOCUMENT_ID) throws IOException {
 		
         requests.add(new Request().setDeleteContentRange(
                 new DeleteContentRangeRequest()
@@ -49,11 +66,13 @@ public class LayoutElements {
         update(docsService, DOCUMENT_ID);
 	}
 	
-	private void addImage(String url, Docs docsService, String DOCUMENT_ID) throws IOException {
+	public void addImage(String url, Docs docsService, String DOCUMENT_ID) throws IOException {
 		
 		/**
 		 * url example: "https://www.gstatic.com/images/branding/product/1x/docs_64dp.png"
 		 */
+		
+		//docsService.documents().get(DOCUMENT_ID).get
 		
 	    requests.add(new Request().setInsertInlineImage(new InsertInlineImageRequest()
 	            .setUri(url)
@@ -69,9 +88,12 @@ public class LayoutElements {
 	    update(docsService, DOCUMENT_ID);
 	}
 	
+	//https://developers.google.com/chart/interactive/docs/gallery/piechart
+	
 	private void update(Docs docsService, String DOCUMENT_ID) throws IOException {
 
 		BatchUpdateDocumentRequest body = new BatchUpdateDocumentRequest().setRequests(requests);
-		BatchUpdateDocumentResponse response = docsService.documents().batchUpdate(DOCUMENT_ID, body).execute();
+		//BatchUpdateDocumentResponse response = docsService.documents().batchUpdate(DOCUMENT_ID, body).execute();
+		docsService.documents().batchUpdate(DOCUMENT_ID, body).execute();
 	}
 }
