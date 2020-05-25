@@ -14,7 +14,7 @@ public class ReportWriter {
 	 * https://developers.google.com/drive/api/v3/quickstart/java
 	 * https://developers.google.com/docs/api/reference/rest/v1/documents/create
 	 */
-	private void createDoc(Docs service) throws IOException {
+	public void createDoc(Docs service) throws IOException {
 	    
 		Document doc = new Document().setTitle("My Document");
 		doc = service.documents().create(doc).execute();

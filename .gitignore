@@ -1,3 +1,10 @@
 target/
 bin/
+res
 .classpath
+tokens/
+# Ignore Gradle project-specific cache directory
+.gradle
+resources/
+# Ignore Gradle build output directory
+build
